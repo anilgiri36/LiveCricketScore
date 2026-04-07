@@ -7,35 +7,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 /* General Body & Font */
-body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg,#1e3d59,#f5f0e1);
-    min-height: 100vh;
-}
+body { font-family: 'Roboto', sans-serif; margin:0; padding:0; background: linear-gradient(135deg,#1e3d59,#f5f0e1); min-height:100vh; }
+header { background: rgba(30,61,89,0.95); color: #fff; text-align:center; padding:20px; font-size:2em; font-weight:bold; box-shadow:0 5px 15px rgba(0,0,0,0.3); }
 
-/* Header */
-header {
-    background: rgba(30,61,89,0.95);
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-    font-size: 2em;
-    font-weight: bold;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-/* Welcome / Card Layout */
-.card {
-    background: rgba(255,255,255,0.95);
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 25px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.card:hover { transform: translateY(-5px); box-shadow:0 15px 35px rgba(0,0,0,0.3);}
+/* Cards */
+.card { background: rgba(255,255,255,0.95); border-radius: 15px; padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: transform 0.3s, box-shadow 0.3s; }
+.card:hover { transform: translateY(-5px); box-shadow:0 15px 35px rgba(0,0,0,0.3); }
 .card h2 { margin-top:0; color:#1e3d59; border-bottom:2px solid #1e3d59; padding-bottom:5px; }
 
 label { display:block; margin:10px 0 5px; font-weight:500; }
@@ -54,7 +31,7 @@ th { background:#1e3d59; color:#fff; }
 
 @media(max-width:768px){ .flex-row .card { flex:1 1 100%; } }
 
-/* Hidden Sections */
+/* Section visibility */
 section { display:none; }
 section.active { display:block; }
 </style>
@@ -124,9 +101,7 @@ section.active { display:block; }
             <label>Team B:</label>
             <select id="teamB"></select>
             <label>Toss Winner:</label>
-            <select id="tossWinner">
-                <option value="">--Select--</option>
-            </select>
+            <select id="tossWinner"></select>
             <label>Toss Decision:</label>
             <select id="tossDecision">
                 <option value="bat">Bat</option>
@@ -182,13 +157,15 @@ function showSection(id){
     document.getElementById(id).classList.add('active');
 }
 
-// Users
-const users = [{username:'admin', password:'admin123', role:'admin'}];
+// Initialize Users in localStorage
+let users = JSON.parse(localStorage.getItem('users')) || [{username:'admin', password:'admin123', role:'admin'}];
+localStorage.setItem('users', JSON.stringify(users));
 
 // Admin Login
 function adminLogin(){
-    const user = document.getElementById('adminUser').value;
-    const pass = document.getElementById('adminPass').value;
+    const user = document.getElementById('adminUser').value.trim();
+    const pass = document.getElementById('adminPass').value.trim();
+    users = JSON.parse(localStorage.getItem('users'));
     const found = users.find(u=>u.username===user && u.password===pass && u.role==='admin');
     if(found){ alert('Login Successful!'); showSection('dashboard'); }
     else{ alert('Invalid credentials!'); }
@@ -199,8 +176,12 @@ function createUser(){
     const username = document.getElementById('newUser').value.trim();
     const password = document.getElementById('newPass').value.trim();
     const role = document.getElementById('role').value;
+    users = JSON.parse(localStorage.getItem('users'));
+
     if(users.some(u=>u.username===username)){ alert('Username already exists!'); return; }
+
     users.push({username,password,role});
+    localStorage.setItem('users', JSON.stringify(users));
     alert(`User ${username} created successfully!`);
     document.getElementById('newUser').value='';
     document.getElementById('newPass').value='';
@@ -239,7 +220,8 @@ function addPlayer() {
 function updateTeamSelects(){
     const teamASelect=document.getElementById('teamA');
     const teamBSelect=document.getElementById('teamB');
-    [teamASelect,teamBSelect].forEach(sel=>{
+    const tossWinner=document.getElementById('tossWinner');
+    [teamASelect,teamBSelect,tossWinner].forEach(sel=>{
         sel.innerHTML='<option value="">--Select--</option>';
         Object.keys(teams).forEach(t=>{
             const option=document.createElement('option'); option.value=t; option.text=t;
@@ -251,7 +233,7 @@ function updateTeamSelects(){
 function startMatch(){
     const teamA=document.getElementById('teamA').value;
     const teamB=document.getElementById('teamB').value;
-    const tossWinner=document.getElementById('tossWinner').value || teamA;
+    const tossWinner=document.getElementById('tossWinner').value;
     if(!teamA || !teamB || teamA===teamB){ alert("Select two different teams!"); return; }
     currentMatch={teamA,teamB,tossWinner,score:[],editor:null};
     alert(`Match started between ${teamA} and ${teamB}. Toss winner: ${tossWinner}`);
@@ -284,5 +266,6 @@ function updateScore(){
     lock=false;
 }
 </script>
+
 </body>
 </html>
