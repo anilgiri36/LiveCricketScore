@@ -2,227 +2,264 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ScoreLock Cricket - Admin Dashboard</title>
+<title>Cricket Manager</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
-/* Body & Fonts */
-body { font-family:'Roboto', sans-serif; margin:0; padding:0; background: linear-gradient(135deg,#1e3d59,#f5f0e1); min-height:100vh; display:flex; justify-content:center; align-items:center; }
-
-/* Frame Login */
-.frame { display:flex; flex-direction:row; background: rgba(255,255,255,0.95); border-radius:20px; box-shadow:0 15px 40px rgba(0,0,0,0.3); overflow:hidden; max-width:900px; width:90%; }
-.frame-left { flex:1; background:url('https://images.unsplash.com/photo-1597927211644-17f38c9b6f6b?auto=format&fit=crop&w=800&q=80') no-repeat center center; background-size:cover; position:relative; color:#fff; padding:30px; }
-.frame-left::after { content:''; position:absolute; inset:0; background:rgba(30,61,89,0.6); border-radius:20px 0 0 20px; }
-.frame-left h2, .frame-left p { position:relative; }
-.frame-left h2 { font-size:2em; margin-bottom:15px; }
-.frame-left p { font-size:1em; }
-
-.frame-right { flex:1; padding:50px 40px; display:flex; flex-direction:column; justify-content:center; }
-.frame-right h2 { color:#1e3d59; margin-bottom:25px; text-align:center; }
-.frame-right label { margin-top:15px; font-weight:500; }
-.frame-right input { padding:12px; margin-top:5px; border-radius:8px; border:1px solid #ccc; font-size:1em; width:100%; box-sizing:border-box; }
-.frame-right button { margin-top:25px; padding:12px; background:#ff6f3c; color:#fff; font-weight:bold; border:none; border-radius:10px; cursor:pointer; transition:0.3s; }
-.frame-right button:hover { background:#ff4f00; }
-.frame-right .back { background:#1e3d59; margin-top:10px; }
-.frame-right .back:hover { background:#163350; }
-
-/* Dashboard */
-#dashboard { display:none; width:90%; max-width:1200px; margin:20px auto; color:#1e3d59; }
-#dashboard h2 { text-align:center; }
-.card { background: rgba(255,255,255,0.95); border-radius: 15px; padding:20px; margin-bottom:25px; box-shadow:0 10px 25px rgba(0,0,0,0.2); }
-.flex-row { display:flex; flex-wrap:wrap; gap:25px; }
-.flex-row .card { flex:1 1 45%; }
-label, input, select, button { display:block; width:100%; margin-top:5px; padding:10px; font-size:1em; border-radius:8px; border:1px solid #ccc; }
-button { cursor:pointer; }
-#liveScore { font-weight:bold; font-size:1.2em; padding:15px; background:#1e3d59; color:#fff; border-radius:10px; text-align:center; }
-
-@media(max-width:768px){ .frame { flex-direction:column; border-radius:20px; } .frame-left { height:200px; border-radius:20px 20px 0 0; } .frame-left::after { border-radius:20px 20px 0 0; } .flex-row .card { flex:1 1 100%; } }
+body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:0; }
+header { background:#1e3d59; color:white; padding:20px; text-align:center; }
+section { display:none; padding:20px; max-width:1000px; margin:20px auto; background:white; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+h2,h3 { color:#1e3d59; }
+label { display:block; margin-top:10px; }
+input, select, button { display:block; margin-top:5px; padding:10px; width:100%; max-width:400px; border-radius:5px; border:1px solid #ccc; }
+button { background:#ff6f3c; color:white; border:none; cursor:pointer; margin-top:10px; }
+button:hover { background:#ff4f00; }
+table { width:100%; border-collapse:collapse; margin-top:10px; }
+th, td { border:1px solid #ccc; padding:8px; text-align:center; }
+#scoreboard { margin-top:15px; padding:10px; background:#1e3d59; color:white; font-weight:bold; text-align:center; border-radius:5px; }
+.deleteBtn { background:red; padding:5px 10px; }
+.deleteBtn:hover { background:#b30000; }
 </style>
 </head>
 <body>
 
-<!-- Login Frame -->
-<div class="frame" id="loginFrame">
-    <div class="frame-left">
-        <h2>Welcome to ScoreLock Cricket</h2>
-        <p>Manage teams, players, matches, and scores efficiently.<br>Admin login provides full access.</p>
-    </div>
-    <div class="frame-right">
-        <h2>Admin Sign-In</h2>
-        <label>Username:</label>
-        <input type="text" id="adminUser" placeholder="Enter username">
-        <label>Password:</label>
-        <input type="password" id="adminPass" placeholder="Enter password">
-        <button onclick="adminLogin()">Sign In</button>
-    </div>
-</div>
+<header>
+<h1>Cricket Manager</h1>
+<p>Admin Full Access | Single User Score Lock</p>
+</header>
 
-<!-- Dashboard Section -->
-<div id="dashboard">
-    <h2>Admin Dashboard - ScoreLock Cricket</h2>
-    
-    <div class="flex-row">
-        <!-- Team & Player Setup -->
-        <div class="card">
-            <h3>Team & Player Setup</h3>
-            <label>Team Name:</label>
-            <input type="text" id="teamName" required>
-            <label>Player Name:</label>
-            <input type="text" id="playerName" required>
-            <label>Mobile Number (+91):</label>
-            <input type="tel" id="mobile" placeholder="10 digits" pattern="\d{10}" maxlength="10" required>
-            <label>Aadhaar Number:</label>
-            <input type="text" id="aadhaar" placeholder="12 digits" pattern="\d{12}" maxlength="12" required>
-            <button onclick="addPlayer()">Add Player</button>
-        </div>
+<section id="home" style="display:block;">
+<h2>Welcome</h2>
+<p>This cricket manager allows admin full control and normal users to manage players and matches.</p>
+<button onclick="showSection('adminLogin')">Admin Sign-In</button>
+<button onclick="showSection('userLogin')">User Sign-In</button>
+</section>
 
-        <!-- Match Setup -->
-        <div class="card">
-            <h3>Match Setup</h3>
-            <label>Team A:</label>
-            <select id="teamA"></select>
-            <label>Team B:</label>
-            <select id="teamB"></select>
-            <label>Toss Winner:</label>
-            <select id="tossWinner"></select>
-            <label>Toss Decision:</label>
-            <select id="tossDecision">
-                <option value="bat">Bat</option>
-                <option value="bowl">Bowl</option>
-            </select>
-            <button onclick="startMatch()">Start Match</button>
-        </div>
-    </div>
+<section id="adminLogin">
+<h2>Admin Login</h2>
+<label>Username:</label><input type="text" id="adminUser">
+<label>Password:</label><input type="password" id="adminPass">
+<button onclick="adminLogin()">Sign In</button>
+<button onclick="showSection('home')">Back</button>
+</section>
 
-    <!-- Player List -->
-    <div class="card">
-        <h3>Player List</h3>
-        <table id="playerTable">
-            <thead>
-                <tr><th>Team</th><th>Player</th><th>Mobile</th><th>Aadhaar</th></tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
+<section id="adminDashboard">
+<h2>Admin Dashboard</h2>
 
-    <!-- Score Update -->
-    <div class="card">
-        <h3>Score Update</h3>
-        <label>Batsman:</label>
-        <select id="batsman"></select>
-        <label>Bowler:</label>
-        <select id="bowler"></select>
-        <label>Runs:</label>
-        <input type="number" id="runs" min="0">
-        <label>Wicket:</label>
-        <select id="wicket"><option value="no">No</option><option value="yes">Yes</option></select>
-        <button onclick="updateScore()">Update Score</button>
-    </div>
+<h3>Create User</h3>
+<label>Username:</label><input type="text" id="newUsername">
+<label>Password:</label><input type="password" id="newUserPass">
+<button onclick="createUser()">Create User</button>
 
-    <div class="card">
-        <h3>Live Score</h3>
-        <div id="liveScore">No match started.</div>
-    </div>
-</div>
+<h3>Users</h3>
+<ul id="userList"></ul>
+
+<h3>Players</h3>
+<table>
+<thead><tr><th>Name</th><th>Mobile</th><th>Aadhaar</th><th>Address</th><th>Team</th><th>Action</th></tr></thead>
+<tbody id="playerTable"></tbody>
+</table>
+
+<h3>Teams</h3>
+<table>
+<thead><tr><th>Team</th><th>Players</th><th>Action</th></tr></thead>
+<tbody id="teamTable"></tbody>
+</table>
+
+<h3>Ball-by-Ball Score</h3>
+<label>Batsman:</label><select id="batsmanSelect"></select>
+<label>Bowler:</label><select id="bowlerSelect"></select>
+<label>Runs:</label><input type="number" id="runsInput" min="0">
+<label>Wicket:</label><select id="wicketInput"><option>No</option><option>Yes</option></select>
+<button onclick="updateScore(true)">Update Score (Admin)</button>
+<div id="scoreboard">Score: 0</div>
+<button onclick="logout()">Logout</button>
+</section>
+
+<section id="userLogin">
+<h2>User Login</h2>
+<label>Username:</label><input type="text" id="userName">
+<label>Password:</label><input type="password" id="userPass">
+<button onclick="userLogin()">Sign In</button>
+<button onclick="showSection('home')">Back</button>
+</section>
+
+<section id="userDashboard">
+<h2>User Dashboard</h2>
+
+<h3>Add Player</h3>
+<label>Name:</label><input type="text" id="playerName">
+<label>Mobile (10 digits):</label><input type="tel" id="playerMobile" maxlength="10">
+<label>Aadhaar (12 digits):</label><input type="text" id="playerAadhaar" maxlength="12">
+<label>Address:</label><input type="text" id="playerAddress">
+<button onclick="addPlayer()">Add Player</button>
+
+<h3>Players</h3>
+<table>
+<thead><tr><th>Name</th><th>Mobile</th><th>Aadhaar</th><th>Address</th><th>Team</th></tr></thead>
+<tbody id="playerTableUser"></tbody>
+</table>
+
+<h3>Form Team (12 Members)</h3>
+<label>Team Name:</label><input type="text" id="teamName">
+<label>Select Players:</label><select id="teamPlayers" multiple size="12"></select>
+<button onclick="formTeam()">Create Team</button>
+
+<h3>Ball-by-Ball Score</h3>
+<label>Batsman:</label><select id="batsmanSelectUser"></select>
+<label>Bowler:</label><select id="bowlerSelectUser"></select>
+<label>Runs:</label><input type="number" id="runsInputUser" min="0">
+<label>Wicket:</label><select id="wicketInputUser"><option>No</option><option>Yes</option></select>
+<button onclick="updateScore(false)">Update Score</button>
+<div id="scoreboardUser">Score: 0</div>
+
+<button onclick="logout()">Logout</button>
+</section>
 
 <script>
-// Users stored in localStorage
-let users = JSON.parse(localStorage.getItem('users')) || [{username:'admin', password:'admin123', role:'admin'}];
-localStorage.setItem('users', JSON.stringify(users));
+function showSection(id){
+    document.querySelectorAll('section').forEach(s=>s.style.display='none');
+    document.getElementById(id).style.display='block';
+}
 
+// Admin
+let admin={username:'admin', password:'admin123'};
+let users=JSON.parse(localStorage.getItem('users'))||[];
+let currentUser=null;
+
+// Data
+let players=[], teams={}, matchScore=[], lock=false;
+
+// Admin Functions
 function adminLogin(){
-    const user = document.getElementById('adminUser').value.trim();
-    const pass = document.getElementById('adminPass').value.trim();
-    users = JSON.parse(localStorage.getItem('users'));
-    const found = users.find(u=>u.username===user && u.password===pass && u.role==='admin');
-    if(found){
-        alert("Login successful!");
-        document.getElementById('loginFrame').style.display='none';
-        document.getElementById('dashboard').style.display='block';
-    } else {
-        alert("Invalid credentials!");
-    }
+    const u=document.getElementById('adminUser').value;
+    const p=document.getElementById('adminPass').value;
+    if(u===admin.username && p===admin.password){ showSection('adminDashboard'); renderUsers(); renderPlayers(true); renderTeams(); refreshSelects(true);}
+    else alert('Invalid admin credentials');
 }
 
-// Cricket Dashboard Logic
-const teams = {};
-const players = [];
-let currentMatch = null;
-let lock = false;
-
-function addPlayer() {
-    const team = document.getElementById('teamName').value.trim();
-    const name = document.getElementById('playerName').value.trim();
-    const mobile = document.getElementById('mobile').value.trim();
-    const aadhaar = document.getElementById('aadhaar').value.trim();
-    if(players.some(p => p.name===name || p.mobile===mobile || p.aadhaar===aadhaar)){
-        alert("Duplicate player details not allowed!");
-        return;
-    }
-    if(!teams[team]) teams[team]=[];
-    const player={team,name,mobile,aadhaar};
-    players.push(player);
-    teams[team].push(player);
-
-    const tbody=document.getElementById('playerTable').querySelector('tbody');
-    const row=tbody.insertRow();
-    row.insertCell(0).innerText=team;
-    row.insertCell(1).innerText=name;
-    row.insertCell(2).innerText=mobile;
-    row.insertCell(3).innerText=aadhaar;
-
-    updateTeamSelects();
+function createUser(){
+    const uname=document.getElementById('newUsername').value;
+    const pass=document.getElementById('newUserPass').value;
+    if(users.find(u=>u.username===uname)){ alert('User exists'); return; }
+    users.push({username:uname,password:pass});
+    localStorage.setItem('users', JSON.stringify(users));
+    renderUsers();
 }
 
-function updateTeamSelects(){
-    const teamASelect=document.getElementById('teamA');
-    const teamBSelect=document.getElementById('teamB');
-    const tossWinner=document.getElementById('tossWinner');
-    [teamASelect,teamBSelect,tossWinner].forEach(sel=>{
-        sel.innerHTML='<option value="">--Select--</option>';
-        Object.keys(teams).forEach(t=>{
-            const option=document.createElement('option'); option.value=t; option.text=t;
-            sel.appendChild(option);
-        });
+function renderUsers(){
+    const ul=document.getElementById('userList'); ul.innerHTML='';
+    users.forEach((u,i)=>{
+        const li=document.createElement('li');
+        li.textContent=u.username+' ';
+        const del=document.createElement('button'); del.textContent='Delete'; del.className='deleteBtn';
+        del.onclick=()=>{ users.splice(i,1); localStorage.setItem('users', JSON.stringify(users)); renderUsers();}
+        li.appendChild(del); ul.appendChild(li);
     });
 }
 
-function startMatch(){
-    const teamA=document.getElementById('teamA').value;
-    const teamB=document.getElementById('teamB').value;
-    const tossWinner=document.getElementById('tossWinner').value;
-    if(!teamA || !teamB || teamA===teamB){ alert("Select two different teams!"); return; }
-    currentMatch={teamA,teamB,tossWinner,score:[],editor:null};
-    alert(`Match started between ${teamA} and ${teamB}. Toss winner: ${tossWinner}`);
-    document.getElementById('liveScore').innerText=`Match: ${teamA} vs ${teamB} | Toss won by ${tossWinner}`;
-    updatePlayerSelects();
+// User login
+function userLogin(){
+    const uname=document.getElementById('userName').value;
+    const pass=document.getElementById('userPass').value;
+    const found=users.find(u=>u.username===uname && u.password===pass);
+    if(found){ currentUser=found; showSection('userDashboard'); renderPlayers(false); refreshSelects(false);}
+    else alert('Invalid credentials');
 }
 
-function updatePlayerSelects(){
-    const batsmanSelect=document.getElementById('batsman');
-    const bowlerSelect=document.getElementById('bowler');
-    [batsmanSelect,bowlerSelect].forEach(sel=>sel.innerHTML='');
-    players.forEach(p=>{
-        const option1=document.createElement('option'); option1.value=p.name; option1.text=p.name;
-        const option2=document.createElement('option'); option2.value=p.name; option2.text=p.name;
-        batsmanSelect.appendChild(option1);
-        bowlerSelect.appendChild(option2);
+function logout(){ currentUser=null; showSection('home'); }
+
+// Players
+function addPlayer(){
+    const isAdmin = document.getElementById('adminDashboard').style.display==='block';
+    const name = isAdmin ? prompt("Player Name") : document.getElementById('playerName').value.trim();
+    const mobile = isAdmin ? prompt("Mobile") : document.getElementById('playerMobile').value.trim();
+    const aadhaar = isAdmin ? prompt("Aadhaar") : document.getElementById('playerAadhaar').value.trim();
+    const address = isAdmin ? prompt("Address") : document.getElementById('playerAddress').value.trim();
+
+    if(!name || !mobile || !aadhaar || !address){ alert('Fill all'); return; }
+    if(mobile.length!==10 || isNaN(mobile)) { alert('Invalid mobile'); return; }
+    if(aadhaar.length!==12 || isNaN(aadhaar)) { alert('Invalid Aadhaar'); return; }
+    if(players.find(p=>p.aadhaar===aadhaar || p.mobile===mobile)){ alert('Duplicate player'); return; }
+
+    players.push({name,mobile,aadhaar,address,team:''});
+    renderPlayers(isAdmin);
+    refreshSelects(isAdmin);
+}
+
+function renderPlayers(isAdmin){
+    const tbody = isAdmin ? document.getElementById('playerTable') : document.getElementById('playerTableUser');
+    tbody.innerHTML='';
+    players.forEach((p,i)=>{
+        const row=tbody.insertRow();
+        row.insertCell(0).innerText=p.name;
+        row.insertCell(1).innerText=p.mobile;
+        row.insertCell(2).innerText=p.aadhaar;
+        row.insertCell(3).innerText=p.address;
+        row.insertCell(4).innerText=p.team;
+        if(isAdmin){
+            const actions=row.insertCell(5);
+            const del=document.createElement('button'); del.textContent='Delete'; del.className='deleteBtn';
+            del.onclick=()=>{ players.splice(i,1); renderPlayers(true); refreshSelects(true);}
+            actions.appendChild(del);
+        }
     });
 }
 
-function updateScore(){
-    if(!currentMatch){ alert("Start a match first!"); return; }
-    if(lock){ alert("Another user is updating score!"); return; }
-    lock=true;
-    const batsman=document.getElementById('batsman').value;
-    const bowler=document.getElementById('bowler').value;
-    const runs=parseInt(document.getElementById('runs').value);
-    const wicket=document.getElementById('wicket').value;
-    currentMatch.score.push({batsman,bowler,runs,wicket});
-    document.getElementById('liveScore').innerText=`Score Updated: ${JSON.stringify(currentMatch.score)}`;
-    lock=false;
+// Teams
+function formTeam(){
+    const teamName=document.getElementById('teamName').value.trim();
+    const selected=document.getElementById('teamPlayers').selectedOptions;
+    if(selected.length!==12){ alert('Select exactly 12'); return; }
+    if(teams[teamName]){ alert('Team exists'); return; }
+    const teamMembers=[];
+    for(let opt of selected){
+        const player=players.find(p=>p.name===opt.value);
+        if(player.team){ alert(`${player.name} already in a team`); return; }
+        player.team=teamName; teamMembers.push(player.name);
+    }
+    teams[teamName]=teamMembers;
+    renderTeams();
+    refreshSelects(false);
+}
+
+function renderTeams(){
+    const tbody=document.getElementById('teamTable'); tbody.innerHTML='';
+    for(let t in teams){
+        const row=tbody.insertRow();
+        row.insertCell(0).innerText=t;
+        row.insertCell(1).innerText=teams[t].join(', ');
+        const actions=row.insertCell(2);
+        const del=document.createElement('button'); del.textContent='Delete'; del.className='deleteBtn';
+        del.onclick=()=>{ teams[t].forEach(pn=>{ players.find(p=>p.name===pn).team=''; }); delete teams[t]; renderTeams(); renderPlayers(true); refreshSelects(true);}
+        actions.appendChild(del);
+    }
+}
+
+// Score
+function refreshSelects(isAdmin){
+    const batsman = isAdmin ? document.getElementById('batsmanSelect') : document.getElementById('batsmanSelectUser');
+    const bowler = isAdmin ? document.getElementById('bowlerSelect') : document.getElementById('bowlerSelectUser');
+    batsman.innerHTML=''; bowler.innerHTML='';
+    players.forEach(p=>{ if(p.team){ batsman.innerHTML+=`<option>${p.name}</option>`; bowler.innerHTML+=`<option>${p.name}</option>`;} });
+}
+
+function updateScore(isAdmin){
+    const batsman = isAdmin ? document.getElementById('batsmanSelect').value : document.getElementById('batsmanSelectUser').value;
+    const bowler = isAdmin ? document.getElementById('bowlerSelect').value : document.getElementById('bowlerSelectUser').value;
+    const runs = parseInt(isAdmin ? prompt("Runs?") : document.getElementById(isAdmin?'runsInput':'runsInputUser').value);
+    const wicket = isAdmin ? prompt("Wicket Yes/No?") : document.getElementById(isAdmin?'wicketInput':'wicketInputUser').value;
+
+    if(!batsman || !bowler || isNaN(runs)){ alert('Fill all'); return; }
+
+    if(!isAdmin && lock){ alert('Another user updating score!'); return; }
+    if(!isAdmin) lock=true;
+
+    matchScore.push({batsman,bowler,runs,wicket});
+    let total = matchScore.reduce((a,v)=>a+v.runs,0);
+    const board = isAdmin?document.getElementById('scoreboard'):document.getElementById('scoreboardUser');
+    board.innerText=`Score: ${total}`;
+
+    if(!isAdmin) lock=false;
 }
 </script>
-
 </body>
 </html>
