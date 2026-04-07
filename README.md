@@ -2,85 +2,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ScoreLock Cricket</title>
+<title>ScoreLock Cricket - Admin Dashboard</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-/* General Body & Font */
-body { font-family: 'Roboto', sans-serif; margin:0; padding:0; background: linear-gradient(135deg,#1e3d59,#f5f0e1); min-height:100vh; }
-header { background: rgba(30,61,89,0.95); color: #fff; text-align:center; padding:20px; font-size:2em; font-weight:bold; box-shadow:0 5px 15px rgba(0,0,0,0.3); }
+/* Body & Fonts */
+body { font-family:'Roboto', sans-serif; margin:0; padding:0; background: linear-gradient(135deg,#1e3d59,#f5f0e1); min-height:100vh; display:flex; justify-content:center; align-items:center; }
 
-/* Cards */
-.card { background: rgba(255,255,255,0.95); border-radius: 15px; padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: transform 0.3s, box-shadow 0.3s; }
-.card:hover { transform: translateY(-5px); box-shadow:0 15px 35px rgba(0,0,0,0.3); }
-.card h2 { margin-top:0; color:#1e3d59; border-bottom:2px solid #1e3d59; padding-bottom:5px; }
+/* Frame Login */
+.frame { display:flex; flex-direction:row; background: rgba(255,255,255,0.95); border-radius:20px; box-shadow:0 15px 40px rgba(0,0,0,0.3); overflow:hidden; max-width:900px; width:90%; }
+.frame-left { flex:1; background:url('https://images.unsplash.com/photo-1597927211644-17f38c9b6f6b?auto=format&fit=crop&w=800&q=80') no-repeat center center; background-size:cover; position:relative; color:#fff; padding:30px; }
+.frame-left::after { content:''; position:absolute; inset:0; background:rgba(30,61,89,0.6); border-radius:20px 0 0 20px; }
+.frame-left h2, .frame-left p { position:relative; }
+.frame-left h2 { font-size:2em; margin-bottom:15px; }
+.frame-left p { font-size:1em; }
 
-label { display:block; margin:10px 0 5px; font-weight:500; }
-input, select, button { width:100%; padding:12px; margin-bottom:12px; border-radius:8px; border:1px solid #ccc; font-size:1em; box-sizing:border-box; }
-button { background:#ff6f3c; color:#fff; border:none; font-weight:bold; cursor:pointer; transition:0.3s; }
-button:hover { background:#ff4f00; }
+.frame-right { flex:1; padding:50px 40px; display:flex; flex-direction:column; justify-content:center; }
+.frame-right h2 { color:#1e3d59; margin-bottom:25px; text-align:center; }
+.frame-right label { margin-top:15px; font-weight:500; }
+.frame-right input { padding:12px; margin-top:5px; border-radius:8px; border:1px solid #ccc; font-size:1em; width:100%; box-sizing:border-box; }
+.frame-right button { margin-top:25px; padding:12px; background:#ff6f3c; color:#fff; font-weight:bold; border:none; border-radius:10px; cursor:pointer; transition:0.3s; }
+.frame-right button:hover { background:#ff4f00; }
+.frame-right .back { background:#1e3d59; margin-top:10px; }
+.frame-right .back:hover { background:#163350; }
 
-table { width:100%; border-collapse: collapse; margin-top:10px; background:#fff; border-radius:10px; overflow:hidden; }
-th, td { padding:12px; text-align:left; border-bottom:1px solid #ddd; }
-th { background:#1e3d59; color:#fff; }
-
+/* Dashboard */
+#dashboard { display:none; width:90%; max-width:1200px; margin:20px auto; color:#1e3d59; }
+#dashboard h2 { text-align:center; }
+.card { background: rgba(255,255,255,0.95); border-radius: 15px; padding:20px; margin-bottom:25px; box-shadow:0 10px 25px rgba(0,0,0,0.2); }
 .flex-row { display:flex; flex-wrap:wrap; gap:25px; }
 .flex-row .card { flex:1 1 45%; }
-
+label, input, select, button { display:block; width:100%; margin-top:5px; padding:10px; font-size:1em; border-radius:8px; border:1px solid #ccc; }
+button { cursor:pointer; }
 #liveScore { font-weight:bold; font-size:1.2em; padding:15px; background:#1e3d59; color:#fff; border-radius:10px; text-align:center; }
 
-@media(max-width:768px){ .flex-row .card { flex:1 1 100%; } }
-
-/* Section visibility */
-section { display:none; }
-section.active { display:block; }
+@media(max-width:768px){ .frame { flex-direction:column; border-radius:20px; } .frame-left { height:200px; border-radius:20px 20px 0 0; } .frame-left::after { border-radius:20px 20px 0 0; } .flex-row .card { flex:1 1 100%; } }
 </style>
 </head>
 <body>
 
-<header>ScoreLock Cricket</header>
-
-<div class="container">
-
-<!-- Welcome Section -->
-<section id="welcome" class="active card">
-    <h2>Welcome</h2>
-    <button onclick="showSection('adminLogin')">Admin Sign-In</button>
-    <button onclick="showSection('createUser')">Create User</button>
-    <button onclick="showSection('dashboard')">Go to Dashboard</button>
-</section>
-
-<!-- Admin Login Section -->
-<section id="adminLogin" class="card">
-    <h2>Admin Sign-In</h2>
-    <label>Username:</label>
-    <input type="text" id="adminUser" placeholder="Enter username">
-    <label>Password:</label>
-    <input type="password" id="adminPass" placeholder="Enter password">
-    <button onclick="adminLogin()">Sign In</button>
-    <button onclick="showSection('welcome')">Back</button>
-</section>
-
-<!-- Create User Section -->
-<section id="createUser" class="card">
-    <h2>Create User</h2>
-    <label>Username:</label>
-    <input type="text" id="newUser" placeholder="Enter username">
-    <label>Password:</label>
-    <input type="password" id="newPass" placeholder="Enter password">
-    <label>Role:</label>
-    <select id="role">
-        <option value="player">Player</option>
-        <option value="admin">Admin</option>
-    </select>
-    <button onclick="createUser()">Create User</button>
-    <button onclick="showSection('welcome')">Back</button>
-</section>
+<!-- Login Frame -->
+<div class="frame" id="loginFrame">
+    <div class="frame-left">
+        <h2>Welcome to ScoreLock Cricket</h2>
+        <p>Manage teams, players, matches, and scores efficiently.<br>Admin login provides full access.</p>
+    </div>
+    <div class="frame-right">
+        <h2>Admin Sign-In</h2>
+        <label>Username:</label>
+        <input type="text" id="adminUser" placeholder="Enter username">
+        <label>Password:</label>
+        <input type="password" id="adminPass" placeholder="Enter password">
+        <button onclick="adminLogin()">Sign In</button>
+    </div>
+</div>
 
 <!-- Dashboard Section -->
-<section id="dashboard" class="card">
-    <h2>Team & Match Setup</h2>
+<div id="dashboard">
+    <h2>Admin Dashboard - ScoreLock Cricket</h2>
+    
     <div class="flex-row">
+        <!-- Team & Player Setup -->
         <div class="card">
             <h3>Team & Player Setup</h3>
             <label>Team Name:</label>
@@ -94,6 +76,7 @@ section.active { display:block; }
             <button onclick="addPlayer()">Add Player</button>
         </div>
 
+        <!-- Match Setup -->
         <div class="card">
             <h3>Match Setup</h3>
             <label>Team A:</label>
@@ -111,21 +94,18 @@ section.active { display:block; }
         </div>
     </div>
 
+    <!-- Player List -->
     <div class="card">
         <h3>Player List</h3>
         <table id="playerTable">
             <thead>
-                <tr>
-                    <th>Team</th>
-                    <th>Player</th>
-                    <th>Mobile</th>
-                    <th>Aadhaar</th>
-                </tr>
+                <tr><th>Team</th><th>Player</th><th>Mobile</th><th>Aadhaar</th></tr>
             </thead>
             <tbody></tbody>
         </table>
     </div>
 
+    <!-- Score Update -->
     <div class="card">
         <h3>Score Update</h3>
         <label>Batsman:</label>
@@ -135,10 +115,7 @@ section.active { display:block; }
         <label>Runs:</label>
         <input type="number" id="runs" min="0">
         <label>Wicket:</label>
-        <select id="wicket">
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
-        </select>
+        <select id="wicket"><option value="no">No</option><option value="yes">Yes</option></select>
         <button onclick="updateScore()">Update Score</button>
     </div>
 
@@ -146,45 +123,25 @@ section.active { display:block; }
         <h3>Live Score</h3>
         <div id="liveScore">No match started.</div>
     </div>
-</section>
-
 </div>
 
 <script>
-// Section Navigation
-function showSection(id){
-    document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-}
-
-// Initialize Users in localStorage
+// Users stored in localStorage
 let users = JSON.parse(localStorage.getItem('users')) || [{username:'admin', password:'admin123', role:'admin'}];
 localStorage.setItem('users', JSON.stringify(users));
 
-// Admin Login
 function adminLogin(){
     const user = document.getElementById('adminUser').value.trim();
     const pass = document.getElementById('adminPass').value.trim();
     users = JSON.parse(localStorage.getItem('users'));
     const found = users.find(u=>u.username===user && u.password===pass && u.role==='admin');
-    if(found){ alert('Login Successful!'); showSection('dashboard'); }
-    else{ alert('Invalid credentials!'); }
-}
-
-// Create User
-function createUser(){
-    const username = document.getElementById('newUser').value.trim();
-    const password = document.getElementById('newPass').value.trim();
-    const role = document.getElementById('role').value;
-    users = JSON.parse(localStorage.getItem('users'));
-
-    if(users.some(u=>u.username===username)){ alert('Username already exists!'); return; }
-
-    users.push({username,password,role});
-    localStorage.setItem('users', JSON.stringify(users));
-    alert(`User ${username} created successfully!`);
-    document.getElementById('newUser').value='';
-    document.getElementById('newPass').value='';
+    if(found){
+        alert("Login successful!");
+        document.getElementById('loginFrame').style.display='none';
+        document.getElementById('dashboard').style.display='block';
+    } else {
+        alert("Invalid credentials!");
+    }
 }
 
 // Cricket Dashboard Logic
