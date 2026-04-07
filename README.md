@@ -26,13 +26,15 @@ th, td { border:1px solid #ccc; padding:8px; text-align:center; }
 <p>Admin Full Access | Single User Score Lock</p>
 </header>
 
+<!-- Home -->
 <section id="home" style="display:block;">
 <h2>Welcome</h2>
-<p>This cricket manager allows admin full control and normal users to manage players and matches.</p>
+<p>Manage your cricket teams, players, and match scores efficiently.</p>
 <button onclick="showSection('adminLogin')">Admin Sign-In</button>
 <button onclick="showSection('userLogin')">User Sign-In</button>
 </section>
 
+<!-- Admin Login -->
 <section id="adminLogin">
 <h2>Admin Login</h2>
 <label>Username:</label><input type="text" id="adminUser">
@@ -41,6 +43,7 @@ th, td { border:1px solid #ccc; padding:8px; text-align:center; }
 <button onclick="showSection('home')">Back</button>
 </section>
 
+<!-- Admin Dashboard -->
 <section id="adminDashboard">
 <h2>Admin Dashboard</h2>
 
@@ -74,6 +77,7 @@ th, td { border:1px solid #ccc; padding:8px; text-align:center; }
 <button onclick="logout()">Logout</button>
 </section>
 
+<!-- User Login -->
 <section id="userLogin">
 <h2>User Login</h2>
 <label>Username:</label><input type="text" id="userName">
@@ -82,6 +86,7 @@ th, td { border:1px solid #ccc; padding:8px; text-align:center; }
 <button onclick="showSection('home')">Back</button>
 </section>
 
+<!-- User Dashboard -->
 <section id="userDashboard">
 <h2>User Dashboard</h2>
 
@@ -100,7 +105,8 @@ th, td { border:1px solid #ccc; padding:8px; text-align:center; }
 
 <h3>Form Team (12 Members)</h3>
 <label>Team Name:</label><input type="text" id="teamName">
-<label>Select Players:</label><select id="teamPlayers" multiple size="12"></select>
+<label>Select Players:</label>
+<select id="teamPlayers" multiple size="12"></select>
 <button onclick="formTeam()">Create Team</button>
 
 <h3>Ball-by-Ball Score</h3>
@@ -207,18 +213,21 @@ function renderPlayers(isAdmin){
 // Teams
 function formTeam(){
     const teamName=document.getElementById('teamName').value.trim();
-    const selected=document.getElementById('teamPlayers').selectedOptions;
-    if(selected.length!==12){ alert('Select exactly 12'); return; }
+    const selected=Array.from(document.getElementById('teamPlayers').selectedOptions);
+    if(selected.length!==12){ alert('Select exactly 12 players'); return; }
     if(teams[teamName]){ alert('Team exists'); return; }
+
     const teamMembers=[];
     for(let opt of selected){
         const player=players.find(p=>p.name===opt.value);
         if(player.team){ alert(`${player.name} already in a team`); return; }
-        player.team=teamName; teamMembers.push(player.name);
+        player.team=teamName; 
+        teamMembers.push(player.name);
     }
     teams[teamName]=teamMembers;
     renderTeams();
-    refreshSelects(false);
+    renderPlayers(true);
+    refreshSelects(true);
 }
 
 function renderTeams(){
@@ -238,8 +247,20 @@ function renderTeams(){
 function refreshSelects(isAdmin){
     const batsman = isAdmin ? document.getElementById('batsmanSelect') : document.getElementById('batsmanSelectUser');
     const bowler = isAdmin ? document.getElementById('bowlerSelect') : document.getElementById('bowlerSelectUser');
-    batsman.innerHTML=''; bowler.innerHTML='';
-    players.forEach(p=>{ if(p.team){ batsman.innerHTML+=`<option>${p.name}</option>`; bowler.innerHTML+=`<option>${p.name}</option>`;} });
+    const teamSelect = document.getElementById('teamPlayers');
+
+    batsman.innerHTML = '';
+    bowler.innerHTML = '';
+    teamSelect.innerHTML = '';
+
+    players.forEach(p=>{
+        if(p.team){
+            batsman.innerHTML += `<option>${p.name}</option>`;
+            bowler.innerHTML += `<option>${p.name}</option>`;
+        } else {
+            teamSelect.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+        }
+    });
 }
 
 function updateScore(isAdmin){
